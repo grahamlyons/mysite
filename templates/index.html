@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+    {% for article in articles %}
+        <h2><a href="/article/{{ article.url_code }}">{{ article.title }}</a></h2>
+        {{ dsp_date(article) }}
+        {{ article.content|truncate|safe }}
+    {% endfor %}
+{% endblock %}

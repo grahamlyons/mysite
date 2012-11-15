@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block metadesc %}{{ article.content|truncate|striptags }}{% endblock %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+    <h1>{{ article.title }}</h1>
+    {{ dsp_date(article) }}
+    {{ article.content|safe }}
+{% endblock %}

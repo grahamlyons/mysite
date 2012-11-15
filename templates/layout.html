@@ -1,0 +1,21 @@
+{% macro dsp_date(article) -%}
+    <p class="date">{{ article.date.strftime('%d-%m-%Y') }}</p>
+{%- endmacro %}
+<!doctype html>
+<html>
+    <head>
+    {% block head %}
+        <title>{% block title %}{% endblock %} - Graham Lyons</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <meta name="description" content="{% block metadesc %}Web dev shit{% endblock %}" />
+    {% endblock %}
+    </head>
+    <body>
+        <h1 class="index-title"><a href="/">Writings about development on the web</a></h1>
+        <div id="content">{% block content %}{% endblock %}</div>
+        <div id="footer">
+        {% block footer %}
+        <a href="http://www.twitter.com/grahamlyons">@grahamlyons</a>
+        {% endblock %}
+        </div>
+    </body>
