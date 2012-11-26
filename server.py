@@ -8,7 +8,9 @@ articles = articles.Articles(DIR)
 @app.route("/")
 def index():
     a = articles.get_articles()
-    return render_template('index.html', articles=a)
+    response = make_response(render_template('index.html', articles=a))
+    response.headers['Cache-Control'] = 'max-age=3600'
+    return response
 
 @app.route("/article/<url_code>")
 def article(url_code=None):
