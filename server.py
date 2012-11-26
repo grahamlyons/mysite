@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, abort, make_response
 import articles
 app = Flask(__name__)
 
@@ -13,6 +13,8 @@ def index():
 @app.route("/article/<url_code>")
 def article(url_code=None):
     article = articles.get_article(url_code)
+    if not article:
+        abort(404)
     return render_template('article.html', article=article)
 
 if __name__ == "__main__":
