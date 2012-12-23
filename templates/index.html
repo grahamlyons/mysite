@@ -9,4 +9,13 @@
     {% if more %}
     <p><a href="/articles/2">More...</a></p>
     {% endif %}
+    {% if pages %}
+    <div>
+        <ul>
+        {% for i in pages %}
+           <li><a href="/articles/{{ i }}">{{ i }}</a></li> 
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 {% endblock %}

@@ -1,5 +1,9 @@
+from math import ceil
+
 from flask import Flask, render_template, abort, make_response, redirect
+
 import articles
+
 app = Flask(__name__)
 
 DIR='./articles'
@@ -26,7 +30,15 @@ def articles_list(page_num=1):
     display = a[(page_num-1)*PER_PAGE:page_num*PER_PAGE]
     if not display:
         abort(404)
-    response = make_response(render_template('index.html', articles=display))
+    print(range(1, int(ceil(len(a)/float(PER_PAGE)))+1))
+    response = make_response(
+        render_template(
+            'index.html', 
+            articles=display, 
+            current_page=page_num, 
+            pages=range(1, int(ceil(len(a)/float(PER_PAGE)))+1)
+        )
+    )
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
