@@ -11,11 +11,20 @@
     {% endif %}
     {% if pages %}
     <div>
-        <ul>
+        <ul class="pagination">
         {% for i in pages %}
-           <li><a href="/articles/{{ i }}">{{ i }}</a></li> 
+            <li>
+            {% if i != current_page %}
+                <a href="/articles/{{ i }}">
+            {% endif %}
+                {{ i }}
+            {% if i != current_page %}
+                </a>
+            {% endif %}
+            </li> 
         {% endfor %}
         </ul>
     </div>
+    <div class="clear">&nbsp;</div>
     {% endif %}
 {% endblock %}

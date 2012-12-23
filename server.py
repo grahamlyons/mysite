@@ -7,7 +7,7 @@ import articles
 app = Flask(__name__)
 
 DIR='./articles'
-PER_PAGE=5
+PER_PAGE=2
 articles = articles.Articles(DIR)
 
 @app.route('/', methods=['GET'])
@@ -30,7 +30,6 @@ def articles_list(page_num=1):
     display = a[(page_num-1)*PER_PAGE:page_num*PER_PAGE]
     if not display:
         abort(404)
-    print(range(1, int(ceil(len(a)/float(PER_PAGE)))+1))
     response = make_response(
         render_template(
             'index.html', 
