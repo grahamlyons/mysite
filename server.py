@@ -3,7 +3,7 @@ import articles
 app = Flask(__name__)
 
 DIR='./articles'
-PER_PAGE=3
+PER_PAGE=5
 articles = articles.Articles(DIR)
 
 @app.route('/', methods=['GET'])
@@ -11,7 +11,9 @@ def index():
     a = articles.get_articles()
     display = a[:PER_PAGE]
     more = True if a > display else False
-    response = make_response(render_template('index.html', articles=display, more=more))
+    response = make_response(
+        render_template('index.html', articles=display, more=more)
+    )
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
