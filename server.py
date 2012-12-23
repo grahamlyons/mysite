@@ -1,14 +1,28 @@
-from flask import Flask, render_template, abort, make_response
+from flask import Flask, render_template, abort, make_response, redirect
 import articles
 app = Flask(__name__)
 
 DIR='./articles'
+PER_PAGE=5
 articles = articles.Articles(DIR)
 
 @app.route('/', methods=['GET'])
 def index():
     a = articles.get_articles()
     response = make_response(render_template('index.html', articles=a))
+    response.headers['Cache-Control'] = 'max-age=3600'
+    return response
+
+@app.route(r'/articles/<page_num>', methods=['GET'])
+def articles_list(page_num=1):
+    page_num = int(page_num)
+    if page_num == 1:
+        return redirect('/', 301)
+    a = articles.get_articles()
+    display = a[(page_num-1)*PER_PAGE:page_num*PER_PAGE]
+    if not display:
+        abort(404)
+    response = make_response(render_template('index.html', articles=display))
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
