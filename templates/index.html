@@ -6,4 +6,7 @@
         {{ dsp_date(article) }}
         {{ article.content|truncate|safe }}
     {% endfor %}
+    {% if more %}
+    <p><a href="/articles/2">More...</a></p>
+    {% endif %}
 {% endblock %}
