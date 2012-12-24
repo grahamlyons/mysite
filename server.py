@@ -7,7 +7,7 @@ import articles
 app = Flask(__name__)
 
 DIR='./articles'
-PER_PAGE=2
+PER_PAGE=5
 articles = articles.Articles(DIR)
 
 @app.route('/', methods=['GET'])
