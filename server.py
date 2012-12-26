@@ -49,4 +49,6 @@ def article(url_code=None):
     return render_template('article.html', article=article)
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True)
+    import sys
+    debug = True if '-d' in sys.argv else False
+    app.run('0.0.0.0', debug=debug)
