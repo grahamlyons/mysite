@@ -10,7 +10,7 @@ DIR='./articles'
 PER_PAGE=5
 articles = articles.Articles(DIR)
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def index():
     a = articles.get_articles()
     display = a[:PER_PAGE]
@@ -21,7 +21,7 @@ def index():
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
-@app.route(r'/articles/<page_num>', methods=['GET'])
+@app.route(r'/articles/<page_num>')
 def articles_list(page_num=1):
     page_num = int(page_num)
     if page_num == 1:
@@ -41,7 +41,7 @@ def articles_list(page_num=1):
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
-@app.route('/article/<url_code>', methods=['GET'])
+@app.route('/article/<url_code>')
 def article(url_code=None):
     article = articles.get_article(url_code)
     if not article:
