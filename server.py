@@ -50,6 +50,14 @@ def article(url_code=None):
         abort(404)
     return render_template('article.html', article=article)
 
+@app.route('/articles/view/<url_code>')
+def legacy_article(url_code):
+    return redirect('/article/{0}'.format(url_code), 301)
+
+@app.route('/categories')
+def legacy_categories():
+    abort(410)
+
 if __name__ == '__main__':
     import sys
     debug = True if '-d' in sys.argv else False
