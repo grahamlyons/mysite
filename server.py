@@ -27,7 +27,6 @@ def index():
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
 
-@app.route('/articles')
 @app.route('/articles/')
 @app.route('/articles/<page_num>')
 def articles_list(page_num=1):
@@ -65,8 +64,9 @@ def article(url_code=None):
 def legacy_article(url_code):
     return redirect('/article/{0}'.format(url_code), 301)
 
-@app.route('/categories')
-def legacy_categories():
+@app.route('/categories/')
+@app.route('/categories/view/<url_code>')
+def legacy_categories(*args, **kwargs):
     abort(410)
 
 if __name__ == '__main__':
