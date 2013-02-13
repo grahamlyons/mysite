@@ -9,6 +9,7 @@ app = Flask(__name__)
 DIR='./articles'
 PER_PAGE=5
 articles = articles.Articles(DIR)
+DEBUG = False
 
 @app.route('/')
 def index():
@@ -16,7 +17,12 @@ def index():
     display = a[:PER_PAGE]
     more = True if a > display else False
     response = make_response(
-        render_template('index.html', articles=display, more=more)
+        render_template(
+            'index.html',
+            articles=display,
+            more=more,
+            debug=DEBUG
+        )
     )
     response.headers['Cache-Control'] = 'max-age=3600'
     return response
@@ -37,7 +43,8 @@ def articles_list(page_num=1):
             'index.html', 
             articles=display, 
             current_page=page_num, 
-            pages=range(1, int(ceil(len(a)/float(PER_PAGE)))+1)
+            pages=range(1, int(ceil(len(a)/float(PER_PAGE)))+1),
+            debug=DEBUG
         )
     )
     response.headers['Cache-Control'] = 'max-age=3600'
@@ -48,7 +55,11 @@ def article(url_code=None):
     article = articles.get_article(url_code)
     if not article:
         abort(404)
-    return render_template('article.html', article=article)
+    return render_template(
+            'article.html',
+            article=article,
+            debug=DEBUG
+        )
 
 @app.route('/articles/view/<url_code>')
 def legacy_article(url_code):
@@ -60,5 +71,5 @@ def legacy_categories():
 
 if __name__ == '__main__':
     import sys
-    debug = True if '-d' in sys.argv else False
-    app.run('0.0.0.0', debug=debug)
+    DEBUG = True if '-d' in sys.argv else DEBUG
+    app.run('0.0.0.0', debug=DEBUG)
