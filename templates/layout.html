@@ -1,12 +1,15 @@
 {% macro dsp_date(article) -%}
     <p class="date">{{ article.date.strftime('%d-%m-%Y') }}</p>
 {%- endmacro %}
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
     <head>
     {% block head %}
-        <title>{% block title %}{% endblock %} - Graham Lyons</title>
-        <meta name="description" content="{% block metadesc %}Web development articles: Python, Javascript, Varnish{% endblock %}" />
+        <title>{% block title %}Web Development Articles{% endblock %} - Graham Lyons</title>
+        <meta name="description" content="{% block metadesc %}Some web development articles by Graham Lyons including subjects such as Python, Javascript, Varnish{% endblock %}" />
+        {% if not debug %}
+        <meta name="google-site-verification" content="8w_81BEAAbhUB3nQNTDCABmLEbTu7o8hMh2VfPFq1jI" />
+        {% endif %}
         <style type="text/css">
             .clear {
                 clear: both;
@@ -48,6 +51,7 @@
 
             pre {
                 padding-left: 20px;
+                color: #000;
             }
 
             .pagination {
@@ -66,8 +70,9 @@
         <h1 class="index-title"><a href="/">Software Development, on the Web</a></h1>
         <div id="content">{% block content %}{% endblock %}</div>
         <div id="footer">
+            <hr/>
         {% block footer %}
-        <a href="http://www.twitter.com/grahamlyons">@grahamlyons</a>
+            <a href="http://www.twitter.com/grahamlyons">@grahamlyons</a>
         {% endblock %}
         </div>
         {% if not debug %}
