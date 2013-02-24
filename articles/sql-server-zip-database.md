@@ -72,4 +72,4 @@ Don't forget to turn off those advanced options afterwards.
     EXEC sp_configure 'show advanced options', 0
     RECONFIGURE
 
-I've put the full code up on Github: http://github.com/grahamlyons/SQL-Server-Backup-and-Zip
+I've put the full code up on Github: [http://github.com/grahamlyons/SQL-Server-Backup-and-Zip](http://github.com/grahamlyons/SQL-Server-Backup-and-Zip)
