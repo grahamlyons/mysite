@@ -1,6 +1,7 @@
+import os
 from math import ceil
 
-from flask import Flask, render_template, abort, make_response, redirect
+from flask import Flask, render_template, abort, make_response, redirect, send_from_directory
 
 import articles
 
@@ -59,6 +60,11 @@ def article(url_code=None):
             article=article,
             debug=DEBUG
         )
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/articles/view/<url_code>')
 def legacy_article(url_code):
