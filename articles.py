@@ -62,6 +62,8 @@ def get_article_from_file(filename):
     newline = '\n'
     with open(filename) as f:
         data = f.read()
+    # Replace any carriage returns
+    data = data.replace('\r', '')
     lines = data.split(newline)
     endofmeta = lines.index('')
     metadata = yaml.load(newline.join(lines[:endofmeta]))
