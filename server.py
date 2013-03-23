@@ -29,7 +29,7 @@ def index():
     return response
 
 @app.route('/articles/')
-@app.route('/articles/<page_num>')
+@app.route('/articles/<int:page_num>')
 def articles_list(page_num=1):
     page_num = int(page_num)
     if page_num == 1:
