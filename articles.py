@@ -8,6 +8,7 @@ import datetime
 EXT = 'md'
 DATEFORMAT = '%Y-%m-%d'
 
+
 class Article(object):
 
     def __init__(self, metadata, content):
@@ -35,6 +36,7 @@ class Article(object):
             metadata['url_code'] = self.url_code
         return '%s\n%s' % (yaml.dump(metadata), self.rawcontent)
 
+
 class Articles(object):
 
     def __init__(self, directory):
@@ -50,13 +52,17 @@ class Articles(object):
     def get_articles(self):
         if not self.articles_by_date:
             unordered = self._get_articles()
-            articles_list = [unordered[url_code] for url_code in unordered] 
-            self.articles_by_date = sorted(articles_list, key=lambda a: a.date, reverse=True)
+            articles_list = [
+                unordered[url_code] for url_code in unordered
+            ]
+            self.articles_by_date = sorted(
+                articles_list, key=lambda a: a.date, reverse=True)
         return self.articles_by_date
 
     def get_article(self, url_code):
         articles = self._get_articles()
         return articles.get(url_code)
+
 
 def get_article_from_file(filename):
     newline = '\n'
@@ -70,6 +76,7 @@ def get_article_from_file(filename):
     content = newline.join(lines[endofmeta+1:])
     return Article(metadata, content)
 
+
 def generate_url_code(title, articles):
     length = 50
     code = title.replace(' ', '-').lower()
@@ -79,9 +86,10 @@ def generate_url_code(title, articles):
     replacement = code
     while code in articles:
         code = replacement + str(i)
-        replacement = code[:len(code)-1] 
+        replacement = code[:len(code)-1]
         i += 1
     return code
+
 
 def get_articles_from_dir(directory):
     if directory[-1] != '/':

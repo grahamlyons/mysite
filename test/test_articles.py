@@ -1,9 +1,12 @@
-import unittest
-import sys, os
+import os
+import sys
 sys.path.insert(0, os.path.realpath(os.path.dirname(__file__) + '/../'))
+
+import unittest
 
 import articles
 import time
+
 
 class TestArticle(unittest.TestCase):
 
@@ -39,6 +42,7 @@ title: Hello World
 #Hello World'''
         self.assertEquals(expected, str(article))
 
+
 class TestArticles(unittest.TestCase):
 
     ENTRIES = {'file1.md': '''title: Testing
@@ -53,7 +57,7 @@ This is an entry
 
  - First thing
  - Second thing''',
-'file2.md': '''title: Testing 2
+               'file2.md': '''title: Testing 2
 url_code: testing-2
 date: 2012-05-25
 tags:
@@ -69,21 +73,30 @@ Processing Streams
     DIR = os.path.realpath(os.path.dirname(__file__) + '/fixtures/')
 
     def setUp(self):
-        try: os.rmdir(self.DIR)
-        except: pass
-        try: os.mkdir(self.DIR)
-        except: pass
+        try:
+            os.rmdir(self.DIR)
+        except:
+            pass
+        try:
+            os.mkdir(self.DIR)
+        except:
+            pass
         for filename in self.ENTRIES:
             with open(self.DIR + '/' + filename, 'w+') as f:
                 f.write(self.ENTRIES[filename])
 
     def tearDown(self):
         for filename in self.ENTRIES:
-            try: os.unlink(self.DIR + '/' + filename)
-            except: pass
-        try: os.rmdir(self.DIR)
-        except: pass
-        
+            try:
+                os.unlink(self.DIR + '/' + filename)
+            except:
+                pass
+        try:
+            os.rmdir(self.DIR)
+        except:
+            pass
+
+
 class TestGetArticles(TestArticles):
 
     def test_getarticlefromfile(self):
@@ -95,6 +108,7 @@ class TestGetArticles(TestArticles):
         articles_in_dir = articles.get_articles_from_dir(self.DIR)
         url_code = 'testing'
         self.assertEquals(url_code, articles_in_dir[url_code].url_code)
+
 
 class TestArticlesForApp(TestArticles):
 
