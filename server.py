@@ -83,7 +83,23 @@ def legacy_article(url_code):
 def legacy_categories(*args, **kwargs):
     abort(410)
 
+
+def get_extra_files(extra_dirs):
+    if not type(extra_dirs) is list:
+        extra_dirs = [extra_dirs]
+    extra_files = extra_dirs[:]
+    for extra_dir in extra_dirs:
+        for dirname, dirs, files in os.walk(extra_dir):
+            for filename in files:
+                filename = os.path.join(dirname, filename)
+                if os.path.isfile(filename):
+                    extra_files.append(filename)
+    return extra_files
+
 if __name__ == '__main__':
     import sys
     DEBUG = True if '-d' in sys.argv else DEBUG
-    app.run('0.0.0.0', debug=DEBUG)
+    extra_files = []
+    if DEBUG:
+        extra_files = get_extra_files(["./templates/", "./articles/"])
+    app.run('0.0.0.0', debug=DEBUG, extra_files=extra_files)
