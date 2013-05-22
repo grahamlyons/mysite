@@ -98,8 +98,6 @@ def get_extra_files(extra_dirs):
 
 if __name__ == '__main__':
     import sys
-    DEBUG = True if '-d' in sys.argv else DEBUG
-    extra_files = []
-    if DEBUG:
-        extra_files = get_extra_files(["./templates/", "./articles/"])
+    DEBUG = True
+    extra_files = get_extra_files(["./templates/", "./articles/"])
     app.run('0.0.0.0', debug=DEBUG, extra_files=extra_files)
