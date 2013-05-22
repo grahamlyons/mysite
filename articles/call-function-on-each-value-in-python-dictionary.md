@@ -18,7 +18,7 @@ I'd written a little webapp using [Flask](http://flask.pocoo.org) and one of the
 
 That worked fine but I wanted to find a way to condense it down a bit and it occurred that maybe I could use the ```**kwargs``` dictionary; I'd just need to map over that and pass each value into ```float```. For a ```list``` (or ```set``` or ```tuple``` etc.) the ```map``` function or list comprehensions would be a perfect fit and second nature to Python developers, but I couldn't recall ever doing anything similar for a ```dict```.
 
-The solution I came up with passes a generator expression which iterates over the items in a dictionary (each item is a ```tuple``` of the key and the value) into the ```dict``` callable. For an arbitrary function, ```func```, and a dictionary ```d``` the solution looks like this:
+The solution I came up with passes a [generator expression](http://docs.python.org/2.7/glossary.html#term-generator-expression) which iterates over the items in a dictionary (each item is a ```tuple``` of the key and the value) into the ```dict``` callable. For an arbitrary function, ```func```, and a dictionary, ```d```, the solution looks like this:
 
     dict((v[0], func(v[1])) for v in d.items())
 
@@ -33,4 +33,6 @@ Plugging that into the Flask example above it now looks like this:
         except ValueError:
             abort(404)
 
-Arguably this is less readable and less explicit than the original form but I like the fact that it'll be the same regardless of the number of parameters i.e. values in the dictionary. This could actually be described as a **dictionary comprehension**, which is a feature which is built into Python 3, and in fact the exact technique shown above is described in [PEP 274](http://www.python.org/dev/peps/pep-0274/). It's good to know that someone cleverer than me has already had the same idea.
+Arguably this is less readable and less explicit than the original form but I like the fact that it'll be the same regardless of the number of parameters i.e. values in the dictionary.
+
+This should actually be described as a **dictionary comprehension**, a feature which is built into Python 3, and in fact the exact technique shown above is described in [PEP 274](http://www.python.org/dev/peps/pep-0274/). It's good to know that someone cleverer than me has already had the same idea.
