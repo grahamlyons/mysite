@@ -1,12 +1,25 @@
-title: Hello World with Tomcat and Maven
-date: 2013-06-02
-url_code: hello-world-with-tomcat-and-maven
+title: Hello World WAR Using Tomcat and Maven on Ubuntu
+date: 2013-06-18
+url_code: hello-world-war-using-tomcat-and-maven-on-ubuntu
 
-Generating a webapp structure:
+Maven is the de facto build tool of Java projects and Tomcat is a very widely used and well-established servlet container. Together they provide an excellent basis for Java projects on the web. To that end I decided to document, from a fresh install of Ubuntu 12.04, the steps required to package and deploy a simple Java webapp, packaged as a WAR, on Tomcat using Maven. At the time of writing the versions used were Tomcat 7 and Maven 3.
 
-    mvn archetype:generate -DgroupId=org.example -DartifactId=hello -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+## Installing the Required Packages
 
-See this structure (cd into 'hello' directory):
+First we need to install the tools we're going to be using, namely Tomcat, Maven and the JDK so that we can compile Java classes. Running this command will get us what we want:
+
+    sudo apt-get install maven tomcat7 openjdk-6-jdk -y
+
+## Generate the Project Structure
+
+Maven has an ```archetype``` plugin which can generate the structure of the project for us; we're after a 'maven-archetype-webapp', which will give us the basic structure and files for a Java web project:
+
+    mvn archetype:generate -DgroupId=org.example\
+     -DartifactId=hello\
+     -DarchetypeArtifactId=maven-archetype-webapp\
+     -DinteractiveMode=false
+
+Run the command above and a directory named 'hello' will be created (taken from the ```artifactId```) containing the appropriate directory structure and the basic files we need. Change into this directory - you can run ```tree``` to see what was created (install it with ```sudo apt-get install tree -y```):
 
     [user@host hello]# tree
     .
@@ -21,18 +34,18 @@ See this structure (cd into 'hello' directory):
 
     5 directories, 3 files
 
-### Add a Servlet
+## Add a Servlet
 
 Create directory structure for Java classes and create the servlet file:
 
-    mkdir -p src/main/java/org/example/
-    touch src/main/java/org/example/HelloServlet.java
+    [user@host hello]# mkdir -p src/main/java/org/example/
+    [user@host hello]# touch src/main/java/org/example/HelloServlet.java
 
-Remove the index.jsp file because we're going to use a Servlet instead:
+Remove the ```index.jsp``` file because we're going to use a Servlet instead:
 
     [user@host hello]# rm -f src/main/webapp/index.jsp
 
-Add the following content to HelloServlet.java:
+Add the following content to ```HelloServlet.java```:
 
     // Reflecting the directory structure where the file lives
     package org.example;
@@ -56,7 +69,9 @@ Add the following content to HelloServlet.java:
         }
     }
 
-Add the following content to the web.xml file:
+The code above defines a class which extends the ```HttpServlet``` abstract class and defines a method to run when the server receives a ```GET``` request - the method ```doGet```. All this method does is print some text in the response.
+
+Add the following content to the ```web.xml``` file, under ```src/main/webapp/WEB-INF/```:
 
     <?xml version="1.0" encoding="UTF-8"?>
     <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
@@ -77,68 +92,60 @@ Add the following content to the web.xml file:
 
     </web-app>
 
-The XML config above maps a URL to the Servlet class.
+The XML config above tells the servlet container - Tomcat, in this case - that requests to the URL ```/``` will be handled by an instance of our servlet class.
 
-### Building and Deploying
+## Building and Deploying the Application
 
-We need to get a Tomcat instance to run the Servlet in:
-
-    sudo apt-get install tomcat7 -y
-
-The servlet api JAR is included in the Tomcat installation so it doesn't need to be bundled in the war file, however it is required for compiling the classes. The following dependency needs to be added to the pom.xml:
+We need to tell Maven that our application depends on the classes in the Java servlet API. The servlet api JAR is included in the Tomcat installation so it doesn't need to be bundled in the WAR file, however it is required for compiling the classes. The following dependency needs to be added to the pom.xml - there should already be a ```dependencies``` tag so add the new ```dependency``` tag inside that:
 
     <dependencies>
         ...
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
-The 'scope' tells Maven that it is already provided so doesn't need to be included.
+The ```scope``` tells Maven that it is already provided so doesn't need to be included.
 
-In the 'hello' directory in the workspace run the following commands:
+In the ```hello``` directory in the workspace run the following commands:
 
-    mvn clean package \
-    rm -rf /usr/local/apache-tomcat-forge-services/webapps/my-webapp \
-    /bin/cp -f target/my-webapp.war /usr/local/apache-tomcat-forge-services/webapps/ \
-    service apache-tomcat-forge-services restart
+This compiles the Java classes and puts them into a WAR file.
 
-Then follow the log file to check for problems:
+    mvn package
 
-    tail -f /data/app-logs/apache-tomcat-forge-services/catalina.out
+This copies the newly created WAR file to the Tomcat webapps folder where it'll be picked up.
 
-If the war file is placed into the 'webapps' directory of the Tomcat installation then it's picked up and unpacked when the server is starting up. The 'rm -rf...' step is necessary to remove an existing installation but for the first time, that won't be there.
+    sudo cp target/hello.war /var/lib/tomcat7/webapps/
 
-### Hitting the endpoint
+In the default install of Tomcat 7 on Ubuntu this is all that's required to get the servlet container to pick up the WAR and register it as an application. To force the service to restart and pick up any new webapps just run: ```sudo service tomcat7 restart```. While the service is starting up you can follow the log to check for problems:
 
-Once the server has started without any errors the application can be accessed by hitting the local IP address on the appropriate port and including the webapp (the name of the war file) in the URL:
+    tail -f /var/lib/tomcat7/logs/catalina.out
 
-    [user@host ~]# http_proxy= curl -D - http://127.0.0.1:8134/hello/
+### Getting a Response
+
+Once the server has picked up the WAR without any errors the application can be accessed by hitting the local IP address on the appropriate port and including the webapp (the name of the WAR file) in the URL:
+
+    [user@host ~]# curl -D - http://127.0.0.1:8080/hello/
     HTTP/1.1 200 OK
+    Server: Apache-Coyote/1.1
     Content-Length: 11
-    Date: Tue, 05 Mar 2013 13:32:42 GMT
-    Server: Apache
+    Date: Tue, 18 Jun 2013 07:12:13 GMT
 
     Hello World
 
-The port that Tomcat listens on is configured in the 'conf/server.xml' under the installation directory (/usr/local/apache-tomcat-forge-services in this case). The information about the IP and port are also available in the log:
-
-    INFO: Starting Coyote HTTP/1.1 on http-0.0.0.0-8134
-
-Listening on port 8134 and all IP addresses here.
+The port that Tomcat listens on is configured in the ```server.xml``` under the installation directory (/etc/tomcat7/server.xml in this case) and in the default installation in Ubuntu it's port 8080.
 
 ### Limitations
 
-This servlet doesn't know about the URL at all so we can hit anything under '/' and it'll respond in exactly the same way:
+This servlet doesn't know about the URL at all so we can hit anything under '```/```' and it'll respond in exactly the same way:
 
-    [user@host ~]# http_proxy= curl -D - http://127.0.0.1:8134/my-webapp/what/the/hell/is/this?
+    [user@host ~]# curl -D - http://127.0.0.1:8080/hello/what/the/hell/is/this?
     HTTP/1.1 200 OK
+    Server: Apache-Coyote/1.1
     Content-Length: 11
-    Date: Tue, 05 Mar 2013 13:46:41 GMT
-    Server: Apache
+    Date: Tue, 18 Jun 2013 07:16:35 GMT
 
     Hello World
-
