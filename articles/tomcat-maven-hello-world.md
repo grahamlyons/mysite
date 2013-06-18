@@ -113,13 +113,13 @@ The ```scope``` tells Maven that it is already provided so doesn't need to be in
 
 In the ```hello``` directory in the workspace run the following commands:
 
-This compiles the Java classes and puts them into a WAR file.
+ - This compiles the Java classes and puts them into a WAR file.
 
-    mvn package
+    ```mvn package```
 
-This copies the newly created WAR file to the Tomcat webapps folder where it'll be picked up.
+ - This copies the newly created WAR file to the Tomcat webapps folder where it'll be picked up.
 
-    sudo cp target/hello.war /var/lib/tomcat7/webapps/
+    ```sudo cp target/hello.war /var/lib/tomcat7/webapps/```
 
 In the default install of Tomcat 7 on Ubuntu this is all that's required to get the servlet container to pick up the WAR and register it as an application. To force the service to restart and pick up any new webapps just run: ```sudo service tomcat7 restart```. While the service is starting up you can follow the log to check for problems:
 
