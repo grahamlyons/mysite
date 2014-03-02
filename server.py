@@ -73,6 +73,13 @@ def favicon():
         'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
+@app.route('/robots.txt')
+def robots():
+    return """User-agent: *
+Disallow: 
+"""
+
+
 @app.route('/articles/view/<url_code>')
 def legacy_article(url_code):
     return redirect('/article/{0}'.format(url_code), 301)
