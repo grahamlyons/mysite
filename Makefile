@@ -1,6 +1,6 @@
 .PHONY: test
 
-SERVER=gramnet2
+SERVER=gramnet3
 APP_ROOT=/var/apps/mysite
 
 test:
