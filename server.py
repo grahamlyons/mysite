@@ -104,7 +104,6 @@ def get_extra_files(extra_dirs):
     return extra_files
 
 if __name__ == '__main__':
-    import sys
     DEBUG = True
     extra_files = get_extra_files(["./templates/", "./articles/"])
     app.run('0.0.0.0', debug=DEBUG, extra_files=extra_files)
