@@ -92,7 +92,6 @@ def generate_url_code(title, articles):
 
 
 def get_articles_from_dir(directory):
-    print(directory)
     if directory[-1] != '/':
         directory += '/'
     articles_list = glob('%s*.%s' % (directory, EXT))

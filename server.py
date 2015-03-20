@@ -9,14 +9,18 @@ import articles
 app = Flask(__name__)
 
 DIR = '{0}articles'.format(os.environ.get('OPENSHIFT_REPO_DIR', './'))
+print(DIR)
 PER_PAGE = 5
 articles = articles.Articles(DIR)
+print(articles)
 DEBUG = False
 
 
 @app.route('/')
 def index():
+    print("Getting articles")
     a = articles.get_articles()
+    print("Got articles")
     display = a[:PER_PAGE]
     more = True if a > display else False
     response = make_response(
