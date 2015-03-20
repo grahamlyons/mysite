@@ -45,8 +45,11 @@ class Articles(object):
         self.directory = directory
 
     def _get_articles(self):
+        print("In _get_articles")
         if not self.articles:
+            print("Instance variable articles didn't exist")
             self.articles = get_articles_from_dir(self.directory)
+            print("Got articles")
         return self.articles
 
     def get_articles(self):
