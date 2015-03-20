@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import yaml
 import markdown2
 from glob import glob
