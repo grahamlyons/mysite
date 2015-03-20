@@ -110,5 +110,7 @@ def get_articles_from_dir(directory):
     for file in articles_list:
         print("Processing file {0}".format(file))
         article = get_article_from_file(file)
+        print("Got article")
         articles[article.url_code] = article
+        print("Url code is {0}".format(article.url_code))
     return articles
