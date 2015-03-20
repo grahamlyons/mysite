@@ -84,7 +84,7 @@ def get_article_from_file(filename):
     lines = data.split(newline)
     print("Got lines, len {0}".format(len(lines)))
     endofmeta = lines.index('')
-    print("Got the end of the metadata: {0}".format(endofmeta)))
+    print("Got the end of the metadata: {0}".format(endofmeta))
     metadata = yaml.load(newline.join(lines[:endofmeta]))
     print("Got metadata: {0}".format(metadata))
     content = newline.join(lines[endofmeta+1:])
