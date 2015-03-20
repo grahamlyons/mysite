@@ -76,7 +76,7 @@ class Articles(object):
 def get_article_from_file(filename):
     print("In get_article_from_file")
     newline = '\n'
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         print("Trying to read file: {0}".format(filename))
         try:
             data = f.read()
