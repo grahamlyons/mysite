@@ -50,13 +50,18 @@ class Articles(object):
         return self.articles
 
     def get_articles(self):
+        print("In get_articles")
         if not self.articles_by_date:
+            print("Instance variable articles_by_date didn't exist")
             unordered = self._get_articles()
+            print("Got unordered articles")
             articles_list = [
                 unordered[url_code] for url_code in unordered
             ]
+            print("Got articles into list")
             self.articles_by_date = sorted(
                 articles_list, key=lambda a: a.date, reverse=True)
+            print("Sorted articles by date")
         return self.articles_by_date
 
     def get_article(self, url_code):
