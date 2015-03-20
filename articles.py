@@ -76,6 +76,7 @@ def get_article_from_file(filename):
     print("In get_article_from_file")
     newline = '\n'
     with open(filename) as f:
+        print("Trying to read file: {0}".format(filename))
         data = f.read()
     print("Got data, len {0}".format(len(data)))
     # Replace any carriage returns
