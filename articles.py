@@ -73,15 +73,22 @@ class Articles(object):
 
 
 def get_article_from_file(filename):
+    print("In get_article_from_file")
     newline = '\n'
     with open(filename) as f:
         data = f.read()
+    print("Got data, len {0}".format(len(data)))
     # Replace any carriage returns
     data = data.replace('\r', '')
+    print("Replaced carriage returns")
     lines = data.split(newline)
+    print("Got lines, len {0}".format(len(lines)))
     endofmeta = lines.index('')
+    print("Got the end of the metadata: {0}".format(endofmeta)))
     metadata = yaml.load(newline.join(lines[:endofmeta]))
+    print("Got metadata: {0}".format(metadata))
     content = newline.join(lines[endofmeta+1:])
+    print("Got content")
     return Article(metadata, content)
 
 
