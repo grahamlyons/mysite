@@ -100,11 +100,15 @@ def generate_url_code(title, articles):
 
 
 def get_articles_from_dir(directory):
+    print("Getting articles from {0}".format(directory))
     if directory[-1] != '/':
         directory += '/'
+    print("Directory is now {0}".format(directory))
     articles_list = glob('%s*.%s' % (directory, EXT))
+    print("Got the glob")
     articles = {}
     for file in articles_list:
+        print("Processing file {0}".format(file))
         article = get_article_from_file(file)
         articles[article.url_code] = article
     return articles
