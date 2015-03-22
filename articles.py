@@ -45,26 +45,18 @@ class Articles(object):
         self.directory = directory
 
     def _get_articles(self):
-        print("In _get_articles")
         if not self.articles:
-            print("Instance variable articles didn't exist")
             self.articles = get_articles_from_dir(self.directory)
-            print("Got articles")
         return self.articles
 
     def get_articles(self):
-        print("In get_articles")
         if not self.articles_by_date:
-            print("Instance variable articles_by_date didn't exist")
             unordered = self._get_articles()
-            print("Got unordered articles")
             articles_list = [
                 unordered[url_code] for url_code in unordered
             ]
-            print("Got articles into list")
             self.articles_by_date = sorted(
                 articles_list, key=lambda a: a.date, reverse=True)
-            print("Sorted articles by date")
         return self.articles_by_date
 
     def get_article(self, url_code):
@@ -73,22 +65,15 @@ class Articles(object):
 
 
 def get_article_from_file(filename):
-    print("In get_article_from_file")
     newline = '\n'
     with open(filename, encoding='utf-8') as f:
         data = f.read()
-    print("Got data, len {0}".format(len(data)))
     # Replace any carriage returns
     data = data.replace('\r', '')
-    print("Replaced carriage returns")
     lines = data.split(newline)
-    print("Got lines, len {0}".format(len(lines)))
     endofmeta = lines.index('')
-    print("Got the end of the metadata: {0}".format(endofmeta))
     metadata = yaml.load(newline.join(lines[:endofmeta]))
-    print("Got metadata: {0}".format(metadata))
     content = newline.join(lines[endofmeta+1:])
-    print("Got content")
     return Article(metadata, content)
 
 
@@ -107,17 +92,11 @@ def generate_url_code(title, articles):
 
 
 def get_articles_from_dir(directory):
-    print("Getting articles from {0}".format(directory))
     if directory[-1] != '/':
         directory += '/'
-    print("Directory is now {0}".format(directory))
     articles_list = glob('%s*.%s' % (directory, EXT))
-    print("Got the glob")
     articles = {}
     for file in articles_list:
-        print("Processing file {0}".format(file))
         article = get_article_from_file(file)
-        print("Got article")
         articles[article.url_code] = article
-        print("Url code is {0}".format(article.url_code))
     return articles
