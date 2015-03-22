@@ -78,10 +78,7 @@ def get_article_from_file(filename):
     newline = '\n'
     with open(filename, encoding='utf-8') as f:
         print("Trying to read file: {0}".format(filename))
-        try:
-            data = f.read()
-        except Exception as e:
-            print("{0} - {1}".format(type(e), e))
+        data = f.read()
     print("Got data, len {0}".format(len(data)))
     # Replace any carriage returns
     data = data.replace('\r', '')
