@@ -8,6 +8,8 @@ import articles
 
 app = Flask(__name__)
 
+print(os.environ)
+
 DIR = '{0}articles'.format(os.environ.get('OPENSHIFT_REPO_DIR', './'))
 print(DIR)
 PER_PAGE = 5
