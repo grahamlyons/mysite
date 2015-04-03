@@ -5,8 +5,11 @@ from flask import Flask, render_template, abort, \
     make_response, redirect, send_from_directory
 
 import articles
+from response_headers_middleware import ResponseHeaders
+
 
 app = Flask(__name__)
+app.wsgi_app = ResponseHeaders(app.wsgi_app, [("X-Clacks-Overhead", "GNU Terry Pratchett")])
 
 DIR = '{0}articles'.format(os.environ.get('OPENSHIFT_REPO_DIR', './'))
 PER_PAGE = 5
