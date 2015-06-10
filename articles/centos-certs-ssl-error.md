@@ -26,7 +26,7 @@ After much time spent banging my head against all of these moving parts I found 
             from (irb):4
             from /home/vagrant/.rvm/rubies/ruby-2.1.4/bin/irb:11:in `<main>'
 
-A great tool from Mislav Marohnić ([mislav](https://github.com/mislav) on Github) - [`doctor.rb`](https://raw.githubusercontent.com/mislav/ssl-tools/master/doctor.rb) - told me that the CA (certificate authority) cetificate couldn't be verified:
+A great tool from Mislav Marohnić ([mislav](https://github.com/mislav) on Github) - [`doctor.rb`](https://raw.githubusercontent.com/mislav/ssl-tools/master/doctor.rb) - told me that the CA (certificate authority) certificate couldn't be verified:
 
     $ ruby doctor.rb s3.amazonaws.com
     /home/vagrant/.rvm/rubies/ruby-2.1.4/bin/ruby (2.1.4-p265)
@@ -57,7 +57,7 @@ I'm sure we're all intimately familiar with the verification return codes within
     the issuer certificate could not be found: this occurs if the issuer certificate of an untrusted certificate cannot be found.
     ...
 
-OK, so we can now see that it's a Verisign certifcate with the organisational unit "Class 3 Public Primary Certification Authority" that can't be verified. This opened up a whole new avenue in my investigation.
+OK, so we can now see that it's a Verisign certificate with the organisational unit "Class 3 Public Primary Certification Authority" that can't be verified. This opened up a whole new avenue in my investigation.
 
 A popular search engine turned up this [page from the cURL mailing list](http://curl.haxx.se/mail/archive-2014-10/0062.html). Dated from the end of October 2014, it says that two Verisign Class 3 Public Primary Certification Authority certificates were dropped from the cURL CA bundle. It also mentions that, "removing that cert from the ca-bundle breaks [connections to] https://s3.amazonaws.com and https://amazon.com". That sounded like the very same problem that I was experiencing via Bundler...
 
@@ -70,6 +70,6 @@ Taking the two missing certificates directly from the post on the cURL mailing l
 
 Et voilà! We now successfully verify SSL connections to S3: `ruby -r 'net/http' -e "Net::HTTP.get(URI.parse('https://s3.amazonaws.com'))"` (that command doesn't output anything but the important thing is that it doesn't raise an exception...)
 
-To aid fixing this in the furture I've put together a shell script to perform all the necessary steps - find it in [this gist](https://gist.github.com/grahamlyons/fa36fe35e798e5cf7ae3). The shell script itself, [verisign_certs.sh](https://gist.githubusercontent.com/grahamlyons/fa36fe35e798e5cf7ae3/raw/b86a31375fa9075730386bb7f25bf983e845d0f3/verisign_certs.sh), can be downloaded and run, as the root user, with `sudo sh ./verisign_certs.sh` (if your CA bundle has changed since installing the `ca-certificates` RPM then you can add the `--force` flag to the script, so long as you're happy to do so).
+To aid fixing this in the future I've put together a shell script to perform all the necessary steps - find it in [this gist](https://gist.github.com/grahamlyons/fa36fe35e798e5cf7ae3). The shell script itself, [verisign_certs.sh](https://gist.githubusercontent.com/grahamlyons/fa36fe35e798e5cf7ae3/raw/b86a31375fa9075730386bb7f25bf983e845d0f3/verisign_certs.sh), can be downloaded and run, as the root user, with `sudo sh ./verisign_certs.sh` (if your CA bundle has changed since installing the `ca-certificates` RPM then you can add the `--force` flag to the script, so long as you're happy to do so).
 
 (I won't advise downloading the script with `curl` and piping it straight into `sh`, lest I end up on [http://curlpipesh.tumblr.com/](http://curlpipesh.tumblr.com/)...)
