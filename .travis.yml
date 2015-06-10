@@ -7,3 +7,8 @@ python:
 install: "pip install -r requirements.txt --use-mirrors"
 # command to run tests
 script: make test
+deploy:
+  provider: openshift
+  user: ${OPENSHIFT_USER}
+  password: ${OPENSHIFT_PASSWORD}
+  domain: ${OPENSHIFT_DOMAIN}
