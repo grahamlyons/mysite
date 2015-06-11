@@ -1,14 +1,16 @@
 language: python
 python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
-# command to install dependencies
-install: "pip install -r requirements.txt --use-mirrors"
-# command to run tests
+- '3.2'
+- '3.3'
+- '3.4'
+install: pip install -r requirements.txt --use-mirrors
 script: make test
 deploy:
   provider: openshift
-  user: ${OPENSHIFT_USER}
-  password: ${OPENSHIFT_PASSWORD}
-  domain: ${OPENSHIFT_DOMAIN}
+  user: $OPENSHIFT_USER
+  password:
+    secure: $OPENSHIFT_PASSWORD
+  app: mysite
+  domain: $OPENSHIFT_DOMAIN
+  on:
+    repo: grahamlyons/mysite
