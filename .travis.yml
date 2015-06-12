@@ -8,8 +8,7 @@ script: make test
 deploy:
   provider: openshift
   user: $OPENSHIFT_USER
-  password:
-    secure: $OPENSHIFT_PASSWORD
+  password: $OPENSHIFT_PASSWORD
   app: mysite
   domain: $OPENSHIFT_DOMAIN
   on:
